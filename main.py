@@ -1,25 +1,38 @@
 
 ## data
+compileMode = False
+
+
+stack = []
 
 dictionary = {}
+
 
 ## built-in words
 
 
-## parsing and execution
+## 
 
 def parse(tok):
     if tok in dictionary:
-        dictionary[tok]() 
-    elif tok.replace('.', '').replace('-', '').isdigit():
+        return dictionary[tok]
+    elif type(tok) is int or type(tok) is float or tok.replace('.', '').replace('-', '').isdigit():
         try:
             num = int(tok)
         except ValueError:
             num = float(tok)
+        return num
     else:
-        raise ValueError("'{0}' is not a valid word or number.".format(tok))
+        raise ValueError("'{0}' is not a valid word or number.".format(tok) )
 
-## read tokens from file
+def compile(tok):
+    pass
+
+def execute(tok):
+    pass
+
+
+## process stream of tokens
 
 def read_chunks(file_object, chunk_size = 1024):
     while True:
@@ -38,7 +51,11 @@ def main():
     file = 'input.forth'
     for tok in read_tokens(file):
         try:
-            parse(tok)
+            result = parse(tok)
+            if compileMode:
+                compile(result)
+            else:
+                execute(result)
         except ValueError as e:
             print(e)
             return

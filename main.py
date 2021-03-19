@@ -1,14 +1,20 @@
+## built-in words
+def builtin_plus():
+    num1 = stack.pop()
+    num2 = stack.pop()
+    stack.append(num2 + num1)
+
 
 ## data
 compileMode = False
 
-
 stack = []
 
-dictionary = {}
+dictionary = {
+    '+': {'builtin': builtin_plus, 'code': []},
+    'INC': {'builtin': False, 'code': [1, '+']}
+}
 
-
-## built-in words
 
 
 ## 
@@ -26,10 +32,16 @@ def parse(tok):
         raise ValueError("'{0}' is not a valid word or number.".format(tok) )
 
 def compile(tok):
-    pass
+    print('shound;t be ca;;ed at a;; eyet')
 
 def execute(tok):
-    pass
+    if type(tok) is int or type(tok) is float:
+        stack.append(tok)
+    elif not tok['builtin'] == False:
+        tok['builtin']()
+    else:
+        for t in tok['code']:
+            execute(parse(t))
 
 
 ## process stream of tokens
@@ -56,10 +68,11 @@ def main():
                 compile(result)
             else:
                 execute(result)
-        except ValueError as e:
-            print(e)
+        except (ValueError, IndexError) as err:
+            print(err)
+            print(stack)
             return
-
+    print(stack)
     print('EOF; done!')
     
 main()
